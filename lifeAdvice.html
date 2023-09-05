@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content of the Day: Life Advice</title>
+    <link rel="icon" type="image/x-icon" href="./Assets/favicon.ico">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bruno+Ace+SC&family=Iceland&display=swap" rel="stylesheet">
+
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+
+    <style>
+        body {
+            background-color: rgb(33, 33, 33);
+            margin: 0;
+        }
+
+        h1{
+            color: white;
+            font-family: 'Iceland', cursive;
+            margin-top: 0;
+        }
+
+        h2{
+            font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+            color: white;
+            text-align: center;
+        }
+
+        .mainDiv{
+            width: 50%;
+        }
+
+        p{
+            color: white;
+            font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+        }
+
+        h4{
+            margin-top: 40px;
+            font-size: 1.3rem;
+            font-family: 'Iceland', cursive;
+            text-align: center;
+            color: white;
+        }
+
+        .flex{
+            display: flex;
+        }
+
+        .just-cent{
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <header class = "just-cent">
+        <img src = "./Assets/whiteLogo.png" width = "170px">
+    </header>
+
+    <div class = "just-cent">
+        <h1>Life Advice</h1>
+    </div>
+
+    <div>
+        <h2>Stop Succumbing to Instant Gratification</h2>
+    </div>
+
+    <div class = "just-cent">
+        <div class = "mainDiv">
+            <p>What is dopamine? Dopamine is a hormone released to give your pleasure, in simple words. Organisms are awarded with dopamine after completing difficult tasks, for evolutionary purposes. For example, when a lion successfully kills and eats a deer, it is awarded with pleasuring dopamine. Dopamine used to be delayed and hard to obtain. But now, in the modern world, we humans are all surrounded with instant dopamine: SUGARY AND JUNK FOODS, VIDEO GAMES, SOCIAL MEDIA, CORNOGRAPHY etc. All we have to do to get the pleasuring rush of dopamine now, is to open tiktok and scroll through videos like a mindless zombie. This is not how we are supposed to live. By constantly being exposed to dopamine, we cannot live without it, and become more dependent on it. This must be why you feel so "depressed," isn't it? But there is a solution, which I will reveal in 3 days. See you then.</p>
+        </div>
+    </div>
+
+    <div>
+        <h4>Last Updated: September 9, 2023</h4>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyD2Q3mFhTcnbcd8aDRsAPJw1UEWKV3vZvc",
+            authDomain: "memeoftheday-c5970.firebaseapp.com",
+            databaseURL: "https://memeoftheday-c5970-default-rtdb.firebaseio.com",
+            projectId: "memeoftheday-c5970",
+            storageBucket: "memeoftheday-c5970.appspot.com",
+            messagingSenderId: "473344259722",
+            appId: "1:473344259722:web:83e640ad8a54fd4b411f73"
+        }
+
+        firebase.initializeApp(firebaseConfig);
+
+        const db = firebase.database();
+        const auth = firebase.auth();
+
+        const checkUser = (user)=>{
+            if (user){
+                db.ref('life-advice/' + user.uid).set(true);
+            } else {
+                db.ref('life-advice/annonymous').get()
+                .then((node)=>{
+
+                    if (node.val() == null || node.val() == undefined){
+                        db.ref('life-advice/annonymous').set(1);
+                    } else {
+                        db.ref('life-advice/annonymous').set(node.val() + 1);
+                    }
+                    
+                }).catch((err)=>{
+                    alert(err);
+                    console.log(err);
+                });
+            }
+        }
+
+        auth.onAuthStateChanged(checkUser);
+    </script>
+</body>
+</html>

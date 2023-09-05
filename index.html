@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meme of the Day 2.0</title>
+    <link rel="icon" type="image/x-icon" href="./Assets/favicon.ico">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bruno+Ace+SC&family=Iceland&display=swap" rel="stylesheet">
+
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+
+    <script src="./index.js"></script>
+
+    <style>
+        body {
+            background-color: rgb(33, 33, 33);
+            margin: 0;
+        }
+
+        .loadingText{
+            font-family: 'Iceland', cursive;
+            color: white;
+        }
+
+        .loadingScreen img{
+            position: absolute;
+            top: 10px;
+            left: calc(50% - 100px);
+        }
+
+        .loadingScreen{
+            position: fixed;
+            z-index: 5;
+            width: 100%;
+            height: 100vh;
+            background-color: rgb(33, 33, 33);
+            transition: 0.25s;
+        }
+
+        .loadingScreen-end{
+            opacity: 0;
+        }
+
+        .loader{
+            position: absolute;
+            background-color: transparent;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            left: calc(50% - 100px);
+            top: calc(50% - 100px);
+            box-shadow: 2px 2px 4px cyan;
+            animation: loading 1.5s linear infinite;
+        }
+
+        @keyframes loading {
+            0%{
+                transform: rotate(0deg);
+            }
+
+            50%{
+                transform: rotate(180deg);
+            }
+            
+            100%{
+                transform: rotate(360deg);
+            }
+        }
+
+        header {
+            user-select: none;
+            position: relative;
+        }
+
+        .menuBtn {
+            display: none;
+            position: fixed;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            left: 20px;
+            transition: 0.15s;
+        }
+
+        .menuBtn-disappear {
+            opacity: 0;
+        }
+
+        .menuBtn-appear {
+            opacity: 1;
+        }
+
+        .navBar {
+            display: none;
+            position: absolute;
+            background-color: black;
+            padding-right: 30px;
+            padding-left: 5px;
+            opacity: 0;
+            left: -150px;
+            transition: 0.25s;
+            z-index: 5;
+        }
+
+        .navBar-appear {
+            opacity: 1;
+            left: 0;
+        }
+
+        .navBar-disappear {
+            opacity: 0;
+            left: -150px;
+        }
+
+        .navExit {
+            position: absolute;
+            top: 10px;
+            right: 9px;
+            background-color: transparent;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+
+        }
+
+        .navBar h2 {
+            color: white;
+            font-family: 'Iceland', cursive;
+            text-align: center;
+            font-size: 1.35rem;
+            margin-bottom: 30px;
+        }
+
+        .navBar a {
+            color: white;
+            font-family: 'Iceland', cursive;
+            font-size: 1.15rem;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .navAdiv {
+            margin-bottom: 30px;
+        }
+
+        .hlink {
+            color: white;
+            text-decoration: none;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            margin-left: 8px;
+            margin-right: 8px;
+            font-size: 1rem;
+        }
+
+        .signUp {
+            margin-left: 17px;
+            margin-right: 12px;
+            position: relative;
+            background: transparent;
+            border: none;
+            font-size: large;
+            font-family: 'Iceland', cursive;
+            font-weight: bolder;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            padding-left: 6px;
+            padding-right: 6px;
+            color: rgb(0, 230, 230);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .signUp:hover {
+            transition-delay: 0.3s;
+            color: white;
+            background-color: rgb(0, 230, 230);
+            box-shadow: 0px 0px 5px cyan, 0px 0px 10px cyan;
+        }
+
+        .signUp span {
+            position: absolute;
+            background-color: rgb(0, 230, 230);
+        }
+
+        .signUp span:nth-child(1) {
+            width: 10px;
+            height: 2px;
+            left: 0;
+            top: 0;
+            transition: 0.25s;
+        }
+
+        .signUp:hover span:nth-child(1) {
+            width: 100%;
+        }
+
+        .signUp span:nth-child(2) {
+            height: 10px;
+            width: 2px;
+            left: 0;
+            top: 0;
+            transition: 0.25s;
+        }
+
+        .signUp:hover span:nth-child(2) {
+            height: 100%;
+        }
+
+        .signUp span:nth-child(3) {
+            width: 10px;
+            height: 2px;
+            right: 0;
+            bottom: 0;
+            transition: 0.25s;
+        }
+
+        .signUp:hover span:nth-child(3) {
+            width: 100%;
+        }
+
+        .signUp span:nth-child(4) {
+            height: 10px;
+            width: 2px;
+            right: 0;
+            bottom: 0;
+            transition: 0.25s;
+        }
+
+        .signUp:hover span:nth-child(4) {
+            height: 100%;
+        }
+
+        .selection {
+            margin-top: 50px;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .heading {
+            color: white;
+            font-family: 'Iceland', cursive;
+            margin-top: 0;
+            text-align: center;
+        }
+
+        .infoDiv {
+            width: 400px;
+        }
+
+        .infoDiv h3 {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            color: white;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .questionBtn {
+            position: relative;
+            background-color: rgb(0, 177, 177);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            margin-top: 10px;
+            padding-left: 9px;
+            padding-right: 9px;
+            padding-top: 6px;
+            padding-bottom: 6px;
+            font-family: 'Iceland', cursive;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: padding-right 0.25s, box-shadow 0.25s;
+        }
+
+        .questionBtn img {
+            position: absolute;
+            right: 15px;
+            top: calc(50% - 8.5px);
+            width: 30px;
+            opacity: 0;
+            user-select: none;
+            transition: 0.25s;
+        }
+
+        .questionBtn:hover img {
+            right: 5px;
+            opacity: 1;
+        }
+
+        .questionBtn:hover {
+            padding-right: 40px;
+            box-shadow: 0px 0px 7px cyan;
+        }
+
+        .buttonDiv {
+            margin-bottom: 50px;
+        }
+
+        .mainBtn {
+            position: relative;
+            background-color: transparent;
+            border: none;
+            border-radius: 10px;
+            color: rgb(0, 228, 228);
+            padding-left: 14px;
+            padding-right: 14px;
+            padding-top: 12px;
+            padding-bottom: 12px;
+            font-size: 1.6rem;
+            font-family: 'Iceland', cursive;
+            overflow: hidden;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+
+        .mainBtn span {
+            position: absolute;
+        }
+
+        .mainBtn span:nth-child(1) {
+            left: -100%;
+            top: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, cyan, rgb(26, 78, 246));
+            opacity: 0;
+            transition: 0.3s;
+        }
+
+        .mainBtn:hover span:nth-child(1) {
+            opacity: 1;
+            left: 100%;
+        }
+
+        .mainBtn:hover {
+            transition-delay: 0.3s;
+            color: white;
+            background-color: rgb(0, 204, 204);
+            box-shadow: 0px 0px 10px cyan;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .just-cent {
+            display: flex;
+            justify-content: center;
+        }
+
+        .align-cent {
+            display: flex;
+            align-items: center;
+        }
+
+        .space-around {
+            justify-content: space-around;
+        }
+
+        .space-bet {
+            justify-content: space-between;
+        }
+
+        @media only screen and (max-width: 780px) {
+            .selection {
+                display: block;
+                margin-top: 30px;
+            }
+
+            .left {
+                margin-bottom: 50px;
+            }
+
+            .buttonDiv {
+                margin-bottom: 20px;
+            }
+
+            .buttonsDiv {
+                display: flex;
+                justify-content: space-around;
+                flex-wrap: wrap;
+            }
+
+            .hlink {
+                display: none;
+            }
+
+            .signUp {
+                display: none;
+            }
+
+            .leftHeader {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .menuBtn {
+                display: block;
+            }
+
+            .navBar {
+                display: block;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    
+    <div class = "loadingScreen just-cent align-cent" id = "loadingScreen">
+        <img src = "./Assets/whiteLogo.png" width = "200px">
+        <h1 class = "loadingText">Loading...</h1>
+        <span class = "loader"></span>
+    </div>
+
+    <div class="navBar">
+        <h2>Menu</h2>
+        <button class="navExit" onclick="navPopup()">X</button>
+        <div class="navAdiv">
+            <a href="">Privacy Policy</a>
+        </div>
+
+        <div class="navAdiv">
+            <a href="./contact.html">Contact Us</a>
+        </div>
+
+        <div class="navAdiv">
+            <a href="">Social Media</a>
+        </div>
+
+        <div class="navAdiv">
+            <a onclick = "goToLogin()" id = "navLogin">Login</a>
+        </div>
+
+        <div class="navAdiv">
+            <a onclick="goToSignUp()" id = "navSignUp">Sign Up</a>
+        </div>
+
+    </div>
+
+    <header class="flex align-cent space-bet">
+        <div class="flex align-cent leftHeader">
+            <button onclick="navPopup()" class="menuBtn" id="menuBtn"><img src="./Assets/menuHam.png"
+                    width="50px"></button>
+            <img src="./Assets/whiteLogo.png" width="200px">
+            <a href="./privacyPolicy.html" class="hlink">Privacy Policy</a>
+            <a href="./contact.html" class="hlink">Contact Us</a>
+        </div>
+
+        <div class="flex align-cent" style="margin-right: 20px;">
+            <a onclick="goToLogin()" class="hlink" id="login" style = "cursor: pointer;">Login</a>
+
+            <button onclick="goToSignUp()" id="signUp" class="signUp" id="signUp">Sign
+                Up<span></span><span></span><span></span><span></span></button>
+
+
+        </div>
+
+    </header>
+
+    <div class="selection">
+        <div class="left">
+            <div>
+                <h1 class="heading">Daily Valuable Content</h1>
+            </div>
+
+            <div class="flex just-cent">
+                <div class="infoDiv">
+                    <h3 class="info">Content of the Day, also known as Meme of the Day, uploads a new meme every Monday-Friday, with a brand new like system, and a comment system. The application is still in the Beta version.</h3>
+                </div>
+            </div>
+
+            <div class="flex just-cent">
+                <a href="./contact.html">
+                    <button class="questionBtn">Ask a Question <img src="./Assets/rightArrow.png"></button>
+                </a>
+
+            </div>
+        </div>
+
+        <div class="buttonsDiv align-cent">
+
+            <div>
+                
+
+                <div class="buttonDiv just-cent">
+                    <a href = "./meme-of-the-day.html">
+                        <button class="mainBtn">Meme of the Day<span></span><span></span><span></span><span></span></button>
+                    </a>
+                </div>
+
+                <div class="buttonDiv just-cent">
+                    <a>
+                        <button class="mainBtn">Coming Soon...<span></span><span></span><span></span><span></span></button>
+                    </a>
+                </div>
+            </div>
+            
+
+        </div>
+
+    </div>
+
+    <!--Script for the navbar-->
+    <script>
+        let clicked = false;
+        let clickedNum = 0;
+        function navPopup() {
+
+
+            if (!clicked) {
+                document.querySelector(".navBar").classList.add("navBar-appear");
+                document.querySelector(".menuBtn").classList.add("menuBtn-disappear");
+                document.getElementById("menuBtn").addEventListener("transitionend", () => {
+                    document.getElementById("menuBtn").style.display = "none";
+                });
+
+                clicked = true;
+                clickedNum += 1;
+            } else {
+                document.querySelector(".navBar").classList.remove("navBar-appear");
+                document.getElementById("menuBtn").style.display = "block";
+                document.querySelector(".menuBtn").classList.add("menuBtn-appear");
+                clicked = false;
+            }
+
+        }
+    </script>
+
+</body>
+
+</html>

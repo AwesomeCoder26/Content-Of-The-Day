@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content of the Day: Quote of the Day</title>
+    <link rel="icon" type="image/x-icon" href="./Assets/favicon.ico">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bruno+Ace+SC&family=Iceland&display=swap" rel="stylesheet">
+
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+
+    <style>
+        body {
+            background-color: rgb(33, 33, 33);
+            margin: 0;
+        }
+
+        .loadingText {
+            font-family: 'Iceland', cursive;
+            color: white;
+        }
+
+        .loadingScreen img {
+            position: absolute;
+            top: 10px;
+            left: calc(50% - 100px);
+        }
+
+        .loadingScreen {
+            position: fixed;
+            z-index: 5;
+            width: 100%;
+            height: 100vh;
+            background-color: rgb(33, 33, 33);
+            transition: 0.25s;
+        }
+
+        .loadingScreen-end {
+            opacity: 0;
+        }
+
+        .loader {
+            position: absolute;
+            background-color: transparent;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            left: calc(50% - 100px);
+            top: calc(50% - 100px);
+            box-shadow: 2px 2px 4px cyan;
+            animation: loading 1.5s linear infinite;
+        }
+
+        @keyframes loading {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            50% {
+                transform: rotate(180deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        h1 {
+            color: white;
+            font-family: 'Iceland', cursive;
+            margin-top: 0;
+        }
+
+        .mainDiv {
+            width: 60%;
+        }
+
+        p {
+            margin: 0;
+            color: white;
+            font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+            text-align: center;
+        }
+
+        .quote {
+            font-style: italic;
+        }
+
+        label {
+            color: white;
+            font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+            margin-left: 5px;
+            text-align: center;
+        }
+
+        h4 {
+            margin-top: 40px;
+            font-size: 1.3rem;
+            font-family: 'Iceland', cursive;
+            text-align: center;
+            color: white;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .just-cent {
+            display: flex;
+            justify-content: center;
+        }
+
+        .align-cent{
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="loadingScreen just-cent align-cent" id="loadingScreen">
+        <img src="./Assets/whiteLogo.png" width="200px">
+        <h1 class="loadingText">Loading...</h1>
+        <span class="loader"></span>
+    </div>
+
+
+    <header class="just-cent">
+        <img src="./Assets/whiteLogo.png" width="170px">
+    </header>
+
+    <div class="just-cent">
+        <h1>Quote of the Day</h1>
+    </div>
+
+    <div class="just-cent" style="margin-top: 100px;">
+        <div class="mainDiv just-cent">
+            <p><span class="quote" id="quote">Enter Quote Here</span> <span id="speaker" class="speaker">- Enter Speaker
+                    Here</span></p>
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyD2Q3mFhTcnbcd8aDRsAPJw1UEWKV3vZvc",
+            authDomain: "memeoftheday-c5970.firebaseapp.com",
+            databaseURL: "https://memeoftheday-c5970-default-rtdb.firebaseio.com",
+            projectId: "memeoftheday-c5970",
+            storageBucket: "memeoftheday-c5970.appspot.com",
+            messagingSenderId: "473344259722",
+            appId: "1:473344259722:web:83e640ad8a54fd4b411f73"
+        }
+
+        firebase.initializeApp(firebaseConfig);
+
+        const db = firebase.database();
+        const auth = firebase.auth();
+
+        const checkUser = (user) => {
+            if (user) {
+                db.ref('quote-of-the-day/' + user.uid).set(true);
+            } else {
+                db.ref('quote-of-the-day/annonymous').get()
+                    .then((node) => {
+
+                        if (node.val() == null || node.val() == undefined) {
+                            db.ref('quote-of-the-day/annonymous').set(1);
+                        } else {
+                            db.ref('quote-of-the-day/annonymous').set(node.val() + 1);
+                        }
+
+                    }).catch((err) => {
+                        alert(err);
+                        console.log(err);
+                    });
+            }
+        }
+
+        auth.onAuthStateChanged(checkUser);
+
+        function displayQuote() {
+            db.ref("quote").get()
+                .then((quoteInfo) => {
+                    document.getElementById("quote").innerText = `"${quoteInfo.val().quote}"`;
+                    document.getElementById("speaker").innerText = `- ${quoteInfo.val().speaker}`;
+
+                    endLoadingScreen();
+                }).catch((err) => {
+                    alert(err);
+                    console.log(err);
+                });
+        }
+
+        displayQuote();
+
+        function endLoadingScreen() {
+            document.querySelector(".loadingScreen").classList.add("loadingScreen-end");
+            document.getElementById("loadingScreen").addEventListener("transitionend", () => {
+                document.getElementById("loadingScreen").remove();
+            });
+        }
+
+    </script>
+
+</body>
+
+</html>

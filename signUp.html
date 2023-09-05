@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content of the Day: Sign Up</title>
+    <link rel="icon" type="image/x-icon" href="./Assets/favicon.ico">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bruno+Ace+SC&family=Iceland&display=swap" rel="stylesheet">
+
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+
+    <script src = "./signUp.js"></script>
+
+    <style>
+        body {
+            background-color: rgb(33, 33, 33);
+            margin: 0;
+        }
+
+        header{
+            width: 100%;
+            height: 180px;
+        }
+
+        h1{
+            text-align: center;
+            font-family: 'Iceland', cursive;
+        }
+        .logo{
+            position: absolute;
+            left: calc(50% - 90px);
+        }
+
+        .mainDiv{
+            background-color: white;
+            width: 300px;
+            padding-bottom: 30px;
+            padding-right: 10px;
+            padding-left: 10px;
+        }
+
+        .credInput{
+            width: 200px;
+            height: 22px;
+            font-size: .9rem;
+            margin-bottom: 25px;
+        }
+
+        .checkbox{
+            margin: 0;
+            margin-left: 5px;
+            cursor: pointer;
+        }
+
+        label{
+            font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            margin-left: 5px;
+        }
+
+        .signUp {
+            margin-left: 17px;
+            margin-right: 12px;
+            position: relative;
+            background: transparent;
+            border: none;
+            font-size: large;
+            font-family: 'Iceland', cursive;
+            font-weight: bolder;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            padding-left: 6px;
+            padding-right: 6px;
+            color: rgb(2, 202, 202);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .signUp:hover {
+            transition-delay: 0.3s;
+            color: white;
+            background-color: rgb(2, 202, 202);
+            box-shadow: 0px 0px 5px rgb(0, 230, 230), 0px 0px 10px rgb(0, 230, 230);
+        }
+
+        .signUp span {
+            position: absolute;
+            background-color: rgb(2, 202, 202);
+        }
+
+        .signUp span:nth-child(1) {
+            width: 10px;
+            height: 2px;
+            left: 0;
+            top: 0;
+            transition: 0.25s;
+        }
+
+        .signUp:hover span:nth-child(1) {
+            width: 100%;
+        }
+
+        .signUp span:nth-child(2) {
+            height: 10px;
+            width: 2px;
+            left: 0;
+            top: 0;
+            transition: 0.25s;
+        }
+
+        .signUp:hover span:nth-child(2) {
+            height: 100%;
+        }
+
+        .signUp span:nth-child(3) {
+            width: 10px;
+            height: 2px;
+            right: 0;
+            bottom: 0;
+            transition: 0.25s;
+        }
+
+        .signUp:hover span:nth-child(3) {
+            width: 100%;
+        }
+
+        .signUp span:nth-child(4) {
+            height: 10px;
+            width: 2px;
+            right: 0;
+            bottom: 0;
+            transition: 0.25s;
+        }
+
+        .signUp:hover span:nth-child(4) {
+            height: 100%;
+        }
+
+
+        .just-cent{
+            display: flex;
+            justify-content: center;
+        }
+
+    </style>
+</head>
+<body>
+    
+    <header>
+        <img class = "logo" src = "./Assets/whiteLogo.png" width = "180px">
+    </header>
+
+    <div class = "just-cent" style = "margin-top: 20px;">
+        <div class = "mainDiv">
+            <h1>Sign Up</h1>
+
+            <div class = "just-cent">
+                <input id = "username" class = "credInput" type = "username" placeholder="Username">
+            </div>
+
+            <div class = "just-cent">
+                <input id = "email" class = "credInput" type = "email" placeholder="Email">
+            </div>
+
+            <div class = "just-cent">
+                <input id = "password" class = "credInput" type = "password" placeholder="Password">
+            </div>
+
+            <div class = "just-cent">
+                <label>Already have an account?<a href = "./signIn.html" style="margin-left: 3px;">Login here</a></label>
+            </div>
+
+            <div class = "just-cent" style = "margin-top: 25px;">
+                <button id="signUp" class="signUp" onclick = "createAccount()">Create Account<span></span><span></span><span></span><span></span></button>
+            </div>
+        </div>
+    </div>
+   
+</body>
+</html>

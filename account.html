@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content of the Day: My Account</title>
+    <link rel="icon" type="image/x-icon" href="./Assets/favicon.ico">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bruno+Ace+SC&family=Iceland&display=swap" rel="stylesheet">
+
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+
+    <style>
+        body {
+            background-color: rgb(33, 33, 33);
+            margin: 0;
+        }
+
+        .loadingText{
+            font-family: 'Iceland', cursive;
+            color: white;
+        }
+
+        .loadingScreen img{
+            position: absolute;
+            top: 10px;
+            left: calc(50% - 100px);
+        }
+
+        .loadingScreen{
+            position: fixed;
+            z-index: 5;
+            width: 100%;
+            height: 100vh;
+            background-color: rgb(33, 33, 33);
+            transition: 0.25s;
+        }
+
+        .loadingScreen-end{
+            opacity: 0;
+        }
+
+        .loader{
+            position: absolute;
+            background-color: transparent;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            left: calc(50% - 100px);
+            top: calc(50% - 100px);
+            box-shadow: 2px 2px 4px cyan;
+            animation: loading 1.5s linear infinite;
+        }
+
+        @keyframes loading {
+            0%{
+                transform: rotate(0deg);
+            }
+
+            50%{
+                transform: rotate(180deg);
+            }
+            
+            100%{
+                transform: rotate(360deg);
+            }
+        }
+
+        .wrapper {
+            width: 100%;
+            height: 100vh;
+        }
+
+        .mainDiv {
+            background-color: white;
+            width: 500px;
+            box-shadow: 0px 0px 15px rgb(118, 118, 118);
+            padding-bottom: 20px;
+            padding-right: 10px;
+            padding-left: 10px;
+        }
+
+        h1 {
+            text-align: center;
+            font-family: 'Iceland', cursive;
+            margin-top: 10px;
+        }
+
+        .infoDiv {
+            margin-top: 25px;
+        }
+
+        .infoText {
+            font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+            font-weight: 500;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .buttonsDiv {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .resetBtn {
+            background-color: transparent;
+            color: blue;
+            font-family: 'Iceland', cursive;
+            font-size: 1.15rem;
+            padding: 8px;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 15px;
+            transition: 0.25s;
+        }
+
+        .resetBtn:hover {
+            background-color: blue;
+            color: white;
+            box-shadow: 0px 0px 10px blue;
+        }
+
+        .deleteAccountBtn {
+            background-color: transparent;
+            color: rgb(228, 0, 0);
+            font-family: 'Iceland', cursive;
+            font-size: 1.15rem;
+            padding: 8px;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 15px;
+            transition: 0.25s;
+        }
+
+        .deleteAccountBtn:hover {
+            background-color: rgb(228, 0, 0);
+            color: white;
+            box-shadow: 0px 0px 10px rgb(228, 0, 0);
+        }
+
+
+
+        .flex {
+            display: flex;
+        }
+
+        .just-cent {
+            display: flex;
+            justify-content: center;
+        }
+
+        .align-cent {
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class = "loadingScreen just-cent align-cent" id = "loadingScreen">
+        <img src = "./Assets/whiteLogo.png" width = "200px">
+        <h1 class = "loadingText">Loading...</h1>
+        <span class = "loader"></span>
+    </div>
+
+    <div class="wrapper just-cent align-cent">
+        <div class="mainDiv">
+            <h1>Account Information</h1>
+
+            <div class="infoDiv">
+                <div>
+                    <h3 class="infoText" id="email">Email: test@mail.com</h3>
+                </div>
+
+                <div>
+                    <h3 class="infoText" id="uid">User ID: XXXXXXXXXXXXX</h3>
+                </div>
+                <div>
+                    <h3 class="infoText" id="username">Username: MemeBot2</h3>
+                </div>
+            </div>
+
+            <div class="buttonsDiv">
+                <button class="resetBtn">Reset Password</button>
+                <button class="deleteAccountBtn">Request Account Deletion</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyD2Q3mFhTcnbcd8aDRsAPJw1UEWKV3vZvc",
+            authDomain: "memeoftheday-c5970.firebaseapp.com",
+            databaseURL: "https://memeoftheday-c5970-default-rtdb.firebaseio.com",
+            projectId: "memeoftheday-c5970",
+            storageBucket: "memeoftheday-c5970.appspot.com",
+            messagingSenderId: "473344259722",
+            appId: "1:473344259722:web:83e640ad8a54fd4b411f73"
+        }
+
+        firebase.initializeApp(firebaseConfig);
+
+        const db = firebase.database();
+        const auth = firebase.auth();
+
+        const checkUser = (user) => {
+            if (!user) {
+                location.replace("./index.html");
+                return;
+            }
+
+            if (!user.emailVerified) {
+                auth.signOut();
+                location.replace("./index.html");
+                return;
+            }
+
+            db.ref("users/" + user.uid).get()
+                .then((userInfo) => {
+                    let username = userInfo.val().username;
+                    let email = userInfo.val().email;
+
+                    document.getElementById("email").innerText = "Email: " + email;
+                    document.getElementById("username").innerText = "Username: " + username;
+                    document.getElementById("uid").innerText = "User ID: " + user.uid;
+
+                    endLoadingScreen();
+
+
+                }).catch((err) => {
+                    alert(err);
+                    console.log(err);
+                });
+
+        }
+
+        auth.onAuthStateChanged(checkUser);
+
+        function endLoadingScreen() {
+            document.querySelector(".loadingScreen").classList.add("loadingScreen-end");
+            document.getElementById("loadingScreen").addEventListener("transitionend", () => {
+                document.getElementById("loadingScreen").remove();
+            });
+        }
+    </script>
+
+</body>
+
+</html>
