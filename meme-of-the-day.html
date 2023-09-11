@@ -21,18 +21,22 @@
             margin: 0;
         }
 
-        .loadingText{
+        .wrapper-popup{
+            opacity: 0.65;
+        }
+
+        .loadingText {
             font-family: 'Iceland', cursive;
             color: white;
         }
 
-        .loadingScreen img{
+        .loadingScreen img {
             position: absolute;
             top: 10px;
             left: calc(50% - 100px);
         }
 
-        .loadingScreen{
+        .loadingScreen {
             position: fixed;
             z-index: 5;
             width: 100%;
@@ -41,11 +45,11 @@
             transition: 0.25s;
         }
 
-        .loadingScreen-end{
+        .loadingScreen-end {
             opacity: 0;
         }
 
-        .loader{
+        .loader {
             position: absolute;
             background-color: transparent;
             width: 200px;
@@ -58,15 +62,15 @@
         }
 
         @keyframes loading {
-            0%{
+            0% {
                 transform: rotate(0deg);
             }
 
-            50%{
+            50% {
                 transform: rotate(180deg);
             }
-            
-            100%{
+
+            100% {
                 transform: rotate(360deg);
             }
         }
@@ -96,56 +100,56 @@
             color: white;
         }
 
-        .ratingDiv{
-            position: absolute; 
+        .ratingDiv {
+            position: absolute;
             right: calc(50% - 300px);
             top: calc(50% - 150px);
         }
 
-        .dislike{
+        .dislike {
             margin-top: 40px;
         }
 
-        .share{
+        .share {
             margin-top: 40px;
         }
 
-        .likeBtn{
+        .likeBtn {
             transition: 0.25s;
             cursor: pointer;
         }
 
-        .likeBtn:hover{
+        .likeBtn:hover {
             opacity: 0.8;
             transform: translateY(-5px);
         }
 
-        .dislikeBtn{
+        .dislikeBtn {
             transition: 0.25s;
             cursor: pointer;
         }
 
-        .dislikeBtn:hover{
+        .dislikeBtn:hover {
             opacity: 0.8;
             transform: translateY(5px);
         }
 
-        .shareBtn{
+        .shareBtn {
             transition: 0.25s;
             cursor: pointer;
         }
 
-        .shareBtn:hover{
+        .shareBtn:hover {
             transform: translate(5px, -5px);
             opacity: 0.8;
         }
 
-        .commentBox{
+        .commentBox {
             margin-top: 20px;
             margin-bottom: 20px;
         }
 
-        textarea{
+        textarea {
             margin-right: 5px;
             resize: none;
             font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
@@ -193,7 +197,7 @@
             transform: translate(20px);
         }
 
-        .sharePopup{
+        .sharePopup {
             transform: scale(0);
             width: 41%;
             position: fixed;
@@ -202,14 +206,13 @@
             left: 29.5%;
             top: 300px;
             padding: 7px;
-            transition: 0.3s;
         }
 
-        .sharePopup-appear{
+        .sharePopup-appear {
             transform: scale(1);
         }
 
-        .sharePopup input{
+        .sharePopup input {
             outline: none;
             border: 1px solid black;
             border-radius: 3px;
@@ -218,32 +221,32 @@
             width: calc(100% - 55px)
         }
 
-        .copyButton{
+        .copyButton {
             object-fit: contain;
             margin-left: 10px;
             cursor: pointer;
         }
 
-        .commentSender{
+        .commentSender {
             padding-left: 20px;
             padding-right: 20px;
         }
 
-        .commentSender h2{
+        .commentSender h2 {
             color: white;
             font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
             font-size: 1.4rem;
             margin-left: 10px;
         }
 
-        .commentMessage{
+        .commentMessage {
             padding-left: 20px;
             padding-right: 20px;
             color: white;
             font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
             width: 400px;
         }
-        
+
         .flex {
             display: flex;
         }
@@ -252,7 +255,8 @@
             display: flex;
             justify-content: center;
         }
-        .align-cent{
+
+        .align-cent {
             display: flex;
             align-items: center;
         }
@@ -261,93 +265,101 @@
 
 <body>
 
-    <div class = "loadingScreen just-cent align-cent" id = "loadingScreen">
-        <img src = "./Assets/whiteLogo.png" width = "200px">
-        <h1 class = "loadingText">Loading...</h1>
-        <span class = "loader"></span>
-    </div>
-    
-    <header class="just-cent">
-        <img src="./Assets/whiteLogo.png" width="170px">
-    </header>
-
-    <div class="just-cent">
-        <h1>Meme of the Day</h1>
-    </div>
-
-    <div class="just-cent" style="margin-top: 10px; position: relative;">
-        <img class = "meme" id = "meme" src = "https://pretoria.co.za/wp-content/uploads/2020/03/funny-coronavirus-meme-reddit-23-1.jpg" width = "400px">
-        <div class = "ratingDiv">
-            <div class = "like">
-                <img class = "likeBtn" src = "./Assets/thumbsup.png" width = "60px" onclick = "like()">
-                <div class = "just-cent">
-                    <label id = "likesText">0</label>
-                </div>
-                
-            </div>
-    
-            <div class = "dislike">
-                <img class = "dislikeBtn" src = "./Assets/thumbsdown.png" width = "60px" onclick = "dislike()">
-                <div class = "just-cent">
-                    <label id = "dislikesText">0</label>
-                </div>
-                
-            </div>
-    
-            <div class = "share">
-                <img id = "shareButton" class = "shareBtn" src = "./Assets/shareButton.png" width = "60px" onclick = "sharePopup()">
-            </div>
+    <div class="wrapper">
+        <div class="loadingScreen just-cent align-cent" id="loadingScreen">
+            <img src="./Assets/whiteLogo.png" width="200px">
+            <h1 class="loadingText">Loading...</h1>
+            <span class="loader"></span>
         </div>
-    </div>
 
-   
+        <header class="just-cent">
+            <img src="./Assets/whiteLogo.png" width="170px">
+        </header>
 
-    <div id = "sharePopup" class = "sharePopup flex">
-        <input value="" id="urlOut" disabled>
-        <img id = "copyButton" src = "./Assets/copyButton.png" width = "40px" class = "copyButton">
-    </div>
-
-    <div>
-        <h1 style = "text-align: center; margin-top: 10px;">Comments</h1>
-    </div>
-
-    <div class = "commentMainDiv">
-        <div class = "just-cent commentBox">
-            <textarea placeholder="Add a comment..."></textarea>
-            <div class = "align-cent">
-                <button class="send" onclick = "sendComment()">Send <img src="./Assets/rightArrow.png"></button>
-            </div>
-            
-        </div>
-        
         <div class="just-cent">
-            <div class = "comments" id = "comments">
+            <h1>Meme of the Day</h1>
+        </div>
 
-                <!-- <div class = "comment">
-                    <div class = "commentSender align-cent">
-                        <img src = "./Assets/userLogo.png" width = "65px"> 
-                        <h2>MemeBot2</h2>
+        <div class="just-cent" style="margin-top: 10px; position: relative;">
+            <img class="meme" id="meme"
+                src="https://pretoria.co.za/wp-content/uploads/2020/03/funny-coronavirus-meme-reddit-23-1.jpg"
+                width="400px">
+            <div class="ratingDiv">
+                <div class="like">
+                    <img class="likeBtn" src="./Assets/thumbsup.png" width="60px" onclick="like()">
+                    <div class="just-cent">
+                        <label id="likesText">0</label>
                     </div>
-        
-                    <div class = "commentMessage">
-                        <p>Yeah so i was walking by the other day and anyways he was just standing there menacingly</p>
+
+                </div>
+
+                <div class="dislike">
+                    <img class="dislikeBtn" src="./Assets/thumbsdown.png" width="60px" onclick="dislike()">
+                    <div class="just-cent">
+                        <label id="dislikesText">0</label>
                     </div>
-                </div> -->
-                
+
+                </div>
+
+                <div class="share">
+                    <img id="shareButton" class="shareBtn" src="./Assets/shareButton.png" width="60px"
+                        onclick="sharePopup()">
+                </div>
             </div>
         </div>
+
+
+
         
 
+        <div>
+            <h1 style="text-align: center; margin-top: 10px;">Comments</h1>
+        </div>
+
+        <div class="commentMainDiv">
+            <div class="just-cent commentBox">
+                <textarea placeholder="Add a comment..."></textarea>
+                <div class="align-cent">
+                    <button class="send" onclick="sendComment()">Send <img src="./Assets/rightArrow.png"></button>
+                </div>
+
+            </div>
+
+            <div class="just-cent">
+                <div class="comments" id="comments">
+
+                    <!-- <div class = "comment">
+                        <div class = "commentSender align-cent">
+                            <img src = "./Assets/userLogo.png" width = "65px"> 
+                            <h2>MemeBot2</h2>
+                        </div>
+            
+                        <div class = "commentMessage">
+                            <p>Yeah so i was walking by the other day and anyways he was just standing there menacingly</p>
+                        </div>
+                    </div> -->
+
+                </div>
+            </div>
+
+
+        </div>
     </div>
 
-    <script src = "./meme-of-the-day.js"></script>
+    <div id="sharePopup" class="sharePopup flex">
+        <input value="" id="urlOut" disabled>
+        <img id="copyButton" src="./Assets/copyButton.png" width="40px" class="copyButton">
+    </div>
+
+    <script src="./meme-of-the-day.js"></script>
     <script>
-        addEventListener("click", (e)=>{
-            if (e.target == document.getElementById("sharePopup") || e.target == document.getElementById("urlOut") || e.target == document.getElementById("copyButton") || e.target == document.getElementById("shareButton")){
+        addEventListener("click", (e) => {
+            if (e.target == document.getElementById("sharePopup") || e.target == document.getElementById("urlOut") || e.target == document.getElementById("copyButton") || e.target == document.getElementById("shareButton")) {
                 return;
             }
 
             document.querySelector(".sharePopup").classList.remove("sharePopup-appear");
+            document.querySelector(".wrapper").classList.remove("wrapper-popup");
         })
     </script>
 
