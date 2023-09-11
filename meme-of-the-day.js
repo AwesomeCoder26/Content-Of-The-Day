@@ -362,6 +362,7 @@ function displayComments() {
 function sharePopup() {
     document.querySelector(".sharePopup").classList.add("sharePopup-appear");
     document.querySelector(".wrapper").classList.add("wrapper-popup");
+
 }
 
 function endLoadingScreen() {
@@ -369,4 +370,14 @@ function endLoadingScreen() {
     document.getElementById("loadingScreen").addEventListener("transitionend", () => {
         document.getElementById("loadingScreen").remove();
     });
+}
+
+async function copyUrl(){
+    try {
+        await navigator.clipboard.writeText(location.href);
+        alert("Link Copied!");
+    } catch(error){
+        alert(error);
+        console.log(error);
+    }
 }
