@@ -340,12 +340,12 @@ function displayComments() {
         let htmlCode = `
             <div class = "comment">
                 <div class = "commentSender align-cent">
-                    <img src = "./Assets/userLogo.png" width = "65px"> 
-                    <h2>${comment.val().sender_username}</h2>
+                    <img src = "./Assets/userLogo.png" width = "45px"> 
+                    <h2 style = "font-size: 1.3rem;">${comment.val().sender_username}</h2>
                 </div>
         
                 <div class = "commentMessage">
-                    <p>${comment.val().message}</p>
+                    <p style = "font-size: 1.15rem;">${comment.val().message}</p>
                 </div>
             </div>
         `
