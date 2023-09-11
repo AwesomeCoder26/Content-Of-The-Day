@@ -99,8 +99,7 @@
         .ratingDiv{
             position: absolute; 
             right: calc(50% - 300px);
-            top: 260px;
-
+            top: calc(50% - 150px);
         }
 
         .dislike{
@@ -138,6 +137,7 @@
 
         .shareBtn:hover{
             transform: translate(5px, -5px);
+            opacity: 0.8;
         }
 
         .commentBox{
@@ -149,9 +149,10 @@
             margin-right: 5px;
             resize: none;
             font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-            padding: 5px;
+            padding: 10px;
             width: 330px;
             height: 50px;
+            border-radius: 20px;
         }
 
         .send {
@@ -274,31 +275,32 @@
         <h1>Meme of the Day</h1>
     </div>
 
-    <div class="just-cent" style="margin-top: 10px;">
+    <div class="just-cent" style="margin-top: 10px; position: relative;">
         <img class = "meme" id = "meme" src = "https://pretoria.co.za/wp-content/uploads/2020/03/funny-coronavirus-meme-reddit-23-1.jpg" width = "400px">
+        <div class = "ratingDiv">
+            <div class = "like">
+                <img class = "likeBtn" src = "./Assets/thumbsup.png" width = "60px" onclick = "like()">
+                <div class = "just-cent">
+                    <label id = "likesText">0</label>
+                </div>
+                
+            </div>
+    
+            <div class = "dislike">
+                <img class = "dislikeBtn" src = "./Assets/thumbsdown.png" width = "60px" onclick = "dislike()">
+                <div class = "just-cent">
+                    <label id = "dislikesText">0</label>
+                </div>
+                
+            </div>
+    
+            <div class = "share">
+                <img id = "shareButton" class = "shareBtn" src = "./Assets/shareButton.png" width = "60px" onclick = "sharePopup()">
+            </div>
+        </div>
     </div>
 
-    <div class = "ratingDiv">
-        <div class = "like">
-            <img class = "likeBtn" src = "./Assets/thumbsup.png" width = "60px" onclick = "like()">
-            <div class = "just-cent">
-                <label id = "likesText">0</label>
-            </div>
-            
-        </div>
-
-        <div class = "dislike">
-            <img class = "dislikeBtn" src = "./Assets/thumbsdown.png" width = "60px" onclick = "dislike()">
-            <div class = "just-cent">
-                <label id = "dislikesText">0</label>
-            </div>
-            
-        </div>
-
-        <div class = "share">
-            <img id = "shareButton" class = "shareBtn" src = "./Assets/shareButton.png" width = "60px" onclick = "sharePopup()">
-        </div>
-    </div>
+   
 
     <div id = "sharePopup" class = "sharePopup flex">
         <input value="" id="urlOut" disabled>
@@ -318,20 +320,23 @@
             
         </div>
         
-        <div class = "comments" id = "comments">
+        <div class="just-cent">
+            <div class = "comments" id = "comments">
 
-            <!-- <div class = "comment">
-                <div class = "commentSender align-cent">
-                    <img src = "./Assets/userLogo.png" width = "65px"> 
-                    <h2>MemeBot2</h2>
-                </div>
-    
-                <div class = "commentMessage">
-                    <p>Yeah so i was walking by the other day and anyways he was just standing there menacingly</p>
-                </div>
-            </div> -->
-            
+                <!-- <div class = "comment">
+                    <div class = "commentSender align-cent">
+                        <img src = "./Assets/userLogo.png" width = "65px"> 
+                        <h2>MemeBot2</h2>
+                    </div>
+        
+                    <div class = "commentMessage">
+                        <p>Yeah so i was walking by the other day and anyways he was just standing there menacingly</p>
+                    </div>
+                </div> -->
+                
+            </div>
         </div>
+        
 
     </div>
 
