@@ -361,6 +361,7 @@ function displayComments() {
 
 function sharePopup() {
     document.querySelector(".sharePopup").classList.add("sharePopup-appear");
+    document.querySelector(".wrapper").classList.add("wrapper-popup");
 }
 
 function endLoadingScreen() {
